@@ -135,10 +135,10 @@ func (p *ProviderConfigDrive) Extract() ([]byte, error) {
 		// Invalid JSON, error
 		return nil, err
 	}
-	hostname, err := metadata["hostname"]
-	if err != nil {
+	hostname, found := metadata["hostname"]
+	if !found {
 		// Invalid JSON, error
-		return nil, err
+		return nil, fmt.Errorf("OpenStack: No hostname in metadata")
 	}
 
 	err = ioutil.WriteFile(path.Join(ConfigPath, Hostname), hostname.([]byte), 0644)
