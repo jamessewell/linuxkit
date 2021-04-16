@@ -108,7 +108,10 @@ func NewConfigDrive(device string) *ProviderConfigDrive {
 			metadata, err := ioutil.ReadFile(path.Join(p.mountPoint, "openstack", "latest", configDriveMetadataFile))
 			// did we find a file?
 			if err == nil && metadata != nil {
-				p.metadata = metadata
+			    p.metadata = metadata
+			    else {
+
+			    }
 			}
 			p.unmount()
 		}
@@ -127,6 +130,24 @@ func (p *ProviderConfigDrive) Probe() bool {
 
 // Extract gets both the ConfigDrive specific and generic userdata
 func (p *ProviderConfigDrive) Extract() ([]byte, error) {
+	// Get host name by unmarshalling JSON. This must not fail
+	metadata := make(map[string]interface{})
+	err := json.Unmarshal(p.metadata, &metadata)
+	if err != nil {
+	    // Invalid JSON, error
+            return nil, err
+	}
+	hostname, err := metadata["hostname"]
+	if err != nil {
+	    // Invalid JSON, error
+            return nil, err
+	}
+
+	err = ioutil.WriteFile(path.Join(ConfigPath, Hostname), hostname, 0644)
+	if err != nil {
+		return nil, fmt.Errorf("OpenStack: Failed to write hostname: %s", err)
+	}
+
 	return p.userdata, p.err
 }
 
