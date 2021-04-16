@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"path"
@@ -140,7 +141,7 @@ func (p *ProviderConfigDrive) Extract() ([]byte, error) {
 		return nil, err
 	}
 
-	err = ioutil.WriteFile(path.Join(ConfigPath, Hostname), hostname, 0644)
+	err = ioutil.WriteFile(path.Join(ConfigPath, Hostname), hostname.([]byte), 0644)
 	if err != nil {
 		return nil, fmt.Errorf("OpenStack: Failed to write hostname: %s", err)
 	}
