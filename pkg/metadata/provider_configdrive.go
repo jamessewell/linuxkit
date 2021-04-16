@@ -108,10 +108,7 @@ func NewConfigDrive(device string) *ProviderConfigDrive {
 			metadata, err := ioutil.ReadFile(path.Join(p.mountPoint, "openstack", "latest", configDriveMetadataFile))
 			// did we find a file?
 			if err == nil && metadata != nil {
-			    p.metadata = metadata
-			    else {
-
-			    }
+				p.metadata = metadata
 			}
 			p.unmount()
 		}
@@ -134,13 +131,13 @@ func (p *ProviderConfigDrive) Extract() ([]byte, error) {
 	metadata := make(map[string]interface{})
 	err := json.Unmarshal(p.metadata, &metadata)
 	if err != nil {
-	    // Invalid JSON, error
-            return nil, err
+		// Invalid JSON, error
+		return nil, err
 	}
 	hostname, err := metadata["hostname"]
 	if err != nil {
-	    // Invalid JSON, error
-            return nil, err
+		// Invalid JSON, error
+		return nil, err
 	}
 
 	err = ioutil.WriteFile(path.Join(ConfigPath, Hostname), hostname, 0644)
