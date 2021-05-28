@@ -141,7 +141,7 @@ func (p *ProviderConfigDrive) Extract() ([]byte, error) {
 		return nil, fmt.Errorf("OpenStack: No hostname in metadata")
 	}
 
-	err = ioutil.WriteFile(path.Join(ConfigPath, Hostname), hostname.([]byte), 0644)
+	err = ioutil.WriteFile(path.Join(ConfigPath, Hostname), []byte(hostname.(string)), 0644)
 	if err != nil {
 		return nil, fmt.Errorf("OpenStack: Failed to write hostname: %s", err)
 	}
